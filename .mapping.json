@@ -1,0 +1,18 @@
+{
+  ".DS_Store":"divkit/public-ios-facade/.DS_Store",
+  ".gitignore":"divkit/public-ios-facade/.gitignore",
+  "DivKitBinaryCompatibilityFacade/ContentViewFactory.swift":"divkit/public-ios-facade/DivKitBinaryCompatibilityFacade/ContentViewFactory.swift",
+  "DivKitBinaryCompatibilityFacade/CustomWrapperBlock.swift":"divkit/public-ios-facade/DivKitBinaryCompatibilityFacade/CustomWrapperBlock.swift",
+  "DivKitBinaryCompatibilityFacade/CustomWrapperBlockView.swift":"divkit/public-ios-facade/DivKitBinaryCompatibilityFacade/CustomWrapperBlockView.swift",
+  "DivKitBinaryCompatibilityFacade/DivKitBinaryCompatibilityFacade.swift":"divkit/public-ios-facade/DivKitBinaryCompatibilityFacade/DivKitBinaryCompatibilityFacade.swift",
+  "DivKitBinaryCompatibilityFacade/DivProperties.swift":"divkit/public-ios-facade/DivKitBinaryCompatibilityFacade/DivProperties.swift",
+  "DivKitBinaryCompatibilityFacade/FacadeCustomBlockFactory.swift":"divkit/public-ios-facade/DivKitBinaryCompatibilityFacade/FacadeCustomBlockFactory.swift",
+  "DivKitBinaryCompatibilityFacade/FacadeExtensionHandler.swift":"divkit/public-ios-facade/DivKitBinaryCompatibilityFacade/FacadeExtensionHandler.swift",
+  "DivKitBinaryCompatibilityFacade/FontProviding.swift":"divkit/public-ios-facade/DivKitBinaryCompatibilityFacade/FontProviding.swift",
+  "DivKitBinaryCompatibilityFacade/LocalImageProviding.swift":"divkit/public-ios-facade/DivKitBinaryCompatibilityFacade/LocalImageProviding.swift",
+  "DivKitBinaryCompatibilityFacade/UrlHandling.swift":"divkit/public-ios-facade/DivKitBinaryCompatibilityFacade/UrlHandling.swift",
+  "DivKitBinaryCompatibilityFacade/WrapperViewConfigurator.swift":"divkit/public-ios-facade/DivKitBinaryCompatibilityFacade/WrapperViewConfigurator.swift",
+  "LICENSE":"divkit/public-ios-facade/LICENSE",
+  "Package.swift":"divkit/public-ios-facade/Package.swift",
+  "README.md":"divkit/public-ios-facade/README.md"
+}
