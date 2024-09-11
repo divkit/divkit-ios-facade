@@ -1,5 +1,4 @@
 {
-  ".DS_Store":"divkit/public-ios-facade/.DS_Store",
   ".gitignore":"divkit/public-ios-facade/.gitignore",
   "DivKitBinaryCompatibilityFacade/ContentViewFactory.swift":"divkit/public-ios-facade/DivKitBinaryCompatibilityFacade/ContentViewFactory.swift",
   "DivKitBinaryCompatibilityFacade/CustomWrapperBlock.swift":"divkit/public-ios-facade/DivKitBinaryCompatibilityFacade/CustomWrapperBlock.swift",
