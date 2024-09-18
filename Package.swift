@@ -25,10 +25,7 @@ let package = Package(
       dependencies: [
         .product(name: "DivKit", package: "divkit-ios")
       ],
-      path: "DivKitBinaryCompatibilityFacade",
-      swiftSettings: [
-        .unsafeFlags(["-enable-library-evolution"]),
-      ]
+      path: "DivKitBinaryCompatibilityFacade"
     ),
   ]
 )
