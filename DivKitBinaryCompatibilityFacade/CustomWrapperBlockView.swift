@@ -1,7 +1,7 @@
 import UIKit
 
-@_implementationOnly import LayoutKit
-@_implementationOnly import VGSL
+internal import LayoutKit
+internal import VGSL
 
 final class CustomWrapperBlockView: BlockView {
   var lastChildView: BlockView?

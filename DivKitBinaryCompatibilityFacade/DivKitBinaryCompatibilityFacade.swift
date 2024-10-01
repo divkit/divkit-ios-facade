@@ -1,7 +1,7 @@
 import UIKit
 
-@_implementationOnly import DivKit
-@_implementationOnly import VGSL
+internal import DivKit
+internal import VGSL
 
 public enum DivKitFacade {
   public static func createView(
@@ -47,9 +47,9 @@ public enum DivKitFacade {
     )
 
     let task = Task { @MainActor in
-      let root = await VisibilityTrackingRoot()
+      let root = VisibilityTrackingRoot()
       root.content = divView
-      await root.layoutIfNeeded()
+      root.layoutIfNeeded()
       return root as UIView
     }
 

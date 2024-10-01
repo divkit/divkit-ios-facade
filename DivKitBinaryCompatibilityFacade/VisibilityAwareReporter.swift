@@ -1,5 +1,5 @@
-@_implementationOnly import DivKit
-@_implementationOnly import VGSL
+internal import DivKit
+internal import VGSL
 
 final class VisibilityAwareReporter: DivReporter {
   private let urlHandler: UrlHandling

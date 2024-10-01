@@ -1,7 +1,7 @@
 import UIKit
 
-@_implementationOnly import DivKit
-@_implementationOnly import VGSL
+internal import DivKit
+internal import VGSL
 
 public protocol LocalImageProviding {
   func localImage(for url: URL) -> UIImage?

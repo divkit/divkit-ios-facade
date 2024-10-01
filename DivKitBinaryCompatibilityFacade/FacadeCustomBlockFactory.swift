@@ -1,7 +1,7 @@
 import UIKit
 
-@_implementationOnly import DivKit
-@_implementationOnly import LayoutKit
+internal import DivKit
+internal import LayoutKit
 
 final class FacadeCustomBlockFactory: DivCustomBlockFactory {
   private let viewFactory: ContentViewFactory

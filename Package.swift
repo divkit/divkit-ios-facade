@@ -25,7 +25,10 @@ let package = Package(
       dependencies: [
         .product(name: "DivKit", package: "divkit-ios")
       ],
-      path: "DivKitBinaryCompatibilityFacade"
+      path: "DivKitBinaryCompatibilityFacade",
+      swiftSettings: [
+        .enableExperimentalFeature("AccessLevelOnImport")
+      ]
     ),
   ]
 )

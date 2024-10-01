@@ -1,6 +1,6 @@
 import Foundation
 
-@_implementationOnly import DivKit
+internal import DivKit
 
 public protocol UrlHandling {
   func handle(url: URL, payload: [String: Any]?)

@@ -1,8 +1,8 @@
 import UIKit
 
-@_implementationOnly import DivKit
-@_implementationOnly import LayoutKit
-@_implementationOnly import VGSL
+internal import DivKit
+internal import LayoutKit
+internal import VGSL
 
 typealias ViewConfigurator<Subview> = (
   _ view: Subview,
