@@ -10,6 +10,7 @@
   "DivKitBinaryCompatibilityFacade/FontProviding.swift":"divkit/public-ios-facade/DivKitBinaryCompatibilityFacade/FontProviding.swift",
   "DivKitBinaryCompatibilityFacade/LocalImageProviding.swift":"divkit/public-ios-facade/DivKitBinaryCompatibilityFacade/LocalImageProviding.swift",
   "DivKitBinaryCompatibilityFacade/UrlHandling.swift":"divkit/public-ios-facade/DivKitBinaryCompatibilityFacade/UrlHandling.swift",
+  "DivKitBinaryCompatibilityFacade/VisibilityAwareReporter.swift":"divkit/public-ios-facade/DivKitBinaryCompatibilityFacade/VisibilityAwareReporter.swift",
   "DivKitBinaryCompatibilityFacade/WrapperViewConfigurator.swift":"divkit/public-ios-facade/DivKitBinaryCompatibilityFacade/WrapperViewConfigurator.swift",
   "LICENSE":"divkit/public-ios-facade/LICENSE",
   "Package.swift":"divkit/public-ios-facade/Package.swift",

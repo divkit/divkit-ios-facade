@@ -28,6 +28,7 @@ public enum DivKitFacade {
       extensionHandlers: wrapperConfigurators.map(\.extensionHandler),
       fontProvider: fontProvider.map(FontProviderAdapter.init),
       imageHolderFactory: imageHolderFactory,
+      reporter: VisibilityAwareReporter(urlHandler: urlHandler),
       urlHandler: UrlHandlerAdapter(handler: urlHandler)
     )
 
