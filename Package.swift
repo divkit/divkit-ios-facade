@@ -16,7 +16,7 @@ let package = Package(
   dependencies: [
     .package(
       url: "https://github.com/divkit/divkit-ios.git",
-      from: Version(stringLiteral: "30.9.0")
+      from: Version(stringLiteral: "31.4.0")
     )
   ],
   targets: [
