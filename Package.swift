@@ -2,6 +2,14 @@
 
 import PackageDescription
 
+let divkit = {
+  let version = Version(stringLiteral: "31.4.0")
+  return (
+    package: Package.Dependency.package(url: "https://github.com/divkit/divkit-ios.git", from: version),
+    packageName: "divkit-ios"
+  )
+}()
+
 let package = Package(
   name: "DivKitBinaryCompatibilityFacade",
   platforms: [
@@ -14,16 +22,13 @@ let package = Package(
     ),
   ],
   dependencies: [
-    .package(
-      url: "https://github.com/divkit/divkit-ios.git",
-      from: Version(stringLiteral: "31.4.0")
-    )
+    divkit.package
   ],
   targets: [
     .target(
       name: "DivKitBinaryCompatibilityFacade",
       dependencies: [
-        .product(name: "DivKit", package: "divkit-ios")
+        .product(name: "DivKit", package: divkit.packageName)
       ],
       path: "DivKitBinaryCompatibilityFacade",
       swiftSettings: [
