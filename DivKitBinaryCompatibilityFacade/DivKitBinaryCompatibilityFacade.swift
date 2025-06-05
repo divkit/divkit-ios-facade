@@ -3,6 +3,10 @@ import UIKit
 internal import DivKit
 internal import VGSL
 
+public protocol FacadeView: UIView {
+  func setVariables(_ variables: [String: Any])
+}
+
 public enum DivKitFacade {
   public static func createView(
     json: [String: Any],
@@ -11,7 +15,7 @@ public enum DivKitFacade {
     customViewFactory: ContentViewFactory? = nil,
     wrapperConfigurators: [any WrapperViewConfigurator] = [],
     urlHandler: UrlHandling
-  ) async -> UIView {
+  ) async -> FacadeView? {
     let imageHolderFactory: DivImageHolderFactory? = if let localImageProvider {
       LocalImageHolderFactory(
         localImageProvider: localImageProvider,
@@ -36,7 +40,7 @@ public enum DivKitFacade {
 
     guard let card = json["card"] as? [String: Any],
           let divCardId = card["log_id"] as? String else {
-      return divView
+      return nil
     }
 
     await divView.setSource(
@@ -47,10 +51,13 @@ public enum DivKitFacade {
     )
 
     let task = Task { @MainActor in
-      let root = VisibilityTrackingRoot()
+      let root = VisibilityTrackingRoot(
+        divCardId: DivCardID(rawValue: divCardId),
+        divKitComponents: divKitComponents
+      )
       root.content = divView
       root.layoutIfNeeded()
-      return root as UIView
+      return root
     }
 
     return await task.value
@@ -58,6 +65,19 @@ public enum DivKitFacade {
 }
 
 private final class VisibilityTrackingRoot: UIView {
+  private let divKitComponents: DivKitComponents
+  private let divCardId: DivCardID
+
+  init(divCardId: DivCardID, divKitComponents: DivKitComponents) {
+    self.divCardId = divCardId
+    self.divKitComponents = divKitComponents
+    super.init(frame: .zero)
+  }
+  
+  required init?(coder: NSCoder) {
+    fatalError("init(coder:) has not been implemented")
+  }
+  
   public var content: (VisibleBoundsTracking & UIView)? {
     didSet {
       if window != nil, let oldValue {
@@ -86,5 +106,41 @@ private final class VisibilityTrackingRoot: UIView {
     } else {
       content.onVisibleBoundsChanged(from: .zero, to: content.bounds)
     }
+  }
+}
+
+extension VisibilityTrackingRoot: FacadeView {
+  public func setVariables(_ variables: [String: Any]) {
+    divKitComponents.variablesStorage.append(
+      variables: variables.divVariables,
+      for: divCardId
+    )
+  }
+}
+
+extension [String: Any] {
+  fileprivate var divVariables: [DivVariableName: DivVariableValue] {
+    compactMapValues {
+      switch $0 {
+      case let value as String:
+        DivVariableValue.string(value)
+      case let value as Double:
+        DivVariableValue.number(value)
+      case let value as Int:
+        DivVariableValue.integer(value)
+      case let value as Bool:
+        DivVariableValue.bool(value)
+      case let value as Color:
+        DivVariableValue.color(value)
+      case let value as URL:
+        DivVariableValue.url(value)
+      case let value as DivDictionary:
+        DivVariableValue.dict(value)
+      case let value as DivArray:
+        DivVariableValue.array(value)
+      default:
+        nil
+      }
+    }.map(key: { DivVariableName(rawValue: $0) }, value: { $0 })
   }
 }
