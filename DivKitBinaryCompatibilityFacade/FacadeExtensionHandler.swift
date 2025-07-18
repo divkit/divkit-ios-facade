@@ -94,6 +94,16 @@ extension DivProperties {
   }
 }
 
+extension Optional<DivFontWeight> {
+  fileprivate func cast() -> DivProperties.TextProperties.FontWeight? {
+    return switch self {
+    case .none: .none
+    case let .some(fontWeight):
+      fontWeight.cast()
+    }
+  }
+}
+
 extension DivFontWeight {
   fileprivate func cast() -> DivProperties.TextProperties.FontWeight {
     switch self {

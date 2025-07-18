@@ -28,7 +28,7 @@ public class DivProperties {
     public let fontSize: Int
     public let lineHeight: Int?
     public let fontFamily: String?
-    public let fontWeight: FontWeight
+    public let fontWeight: FontWeight?
     public let textColor: UIColor
     public let textAlignmentHorizonal: AlignmentHorizontal
     public let textAlignmentVertical: AlignmentVertical
@@ -37,7 +37,7 @@ public class DivProperties {
       fontSize: Int,
       lineHeight: Int?,
       fontFamily: String?,
-      fontWeight: FontWeight,
+      fontWeight: FontWeight?,
       textColor: UIColor,
       textAlignmentHorizonal: AlignmentHorizontal,
       textAlignmentVertical: AlignmentVertical
