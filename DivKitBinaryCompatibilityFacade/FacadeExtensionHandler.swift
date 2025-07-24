@@ -79,7 +79,7 @@ extension DivProperties {
         fontSize: divText.resolveFontSize(context.expressionResolver),
         lineHeight: divText.resolveLineHeight(context.expressionResolver),
         fontFamily: divText.resolveFontFamily(context.expressionResolver),
-        fontWeight: divText.resolveFontWeight(context.expressionResolver).cast(),
+        fontWeight: divText.resolveFontWeight(context.expressionResolver)?.cast(),
         textColor: divText.resolveTextColor(context.expressionResolver).systemColor,
         textAlignmentHorizonal: divText.resolveTextAlignmentHorizontal(context.expressionResolver)
           .cast(),
@@ -91,16 +91,6 @@ extension DivProperties {
     }
 
     self.init(id: div.id, textProperties: textProperties)
-  }
-}
-
-extension Optional<DivFontWeight> {
-  fileprivate func cast() -> DivProperties.TextProperties.FontWeight? {
-    return switch self {
-    case .none: .none
-    case let .some(fontWeight):
-      fontWeight.cast()
-    }
   }
 }
 
