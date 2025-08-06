@@ -1,5 +1,6 @@
 import UIKit
 
+@_spi(Legacy)
 internal import DivKit
 internal import VGSL
 
@@ -61,6 +62,58 @@ public enum DivKitFacade {
     }
 
     return await task.value
+  }
+  
+  public static func createViewSync(
+    json: [String: Any],
+    localImageProvider: LocalImageProviding? = nil,
+    fontProvider: FontProviding? = nil,
+    customViewFactory: ContentViewFactory? = nil,
+    wrapperConfigurators: [any WrapperViewConfigurator] = [],
+    urlHandler: UrlHandling
+  ) -> FacadeView? {
+    let imageHolderFactory: DivImageHolderFactory? = if let localImageProvider {
+      LocalImageHolderFactory(
+        localImageProvider: localImageProvider,
+        imageHolderFactory: DefaultImageHolderFactory(
+          requestPerformer: URLRequestPerformer(urlTransform: nil)
+        )
+      )
+    } else {
+      nil
+    }
+
+    let divKitComponents = DivKitComponents(
+      divCustomBlockFactory: customViewFactory.map(FacadeCustomBlockFactory.init),
+      extensionHandlers: wrapperConfigurators.map(\.extensionHandler),
+      fontProvider: fontProvider.map(FontProviderAdapter.init),
+      imageHolderFactory: imageHolderFactory,
+      reporter: VisibilityAwareReporter(urlHandler: urlHandler),
+      urlHandler: UrlHandlerAdapter(handler: urlHandler)
+    )
+
+    let divView = DivView(divKitComponents: divKitComponents)
+
+    guard let card = json["card"] as? [String: Any],
+          let divCardId = card["log_id"] as? String else {
+      return nil
+    }
+
+    divView.setSource(
+      DivViewSource(
+        kind: .json(json),
+        cardId: DivCardID(rawValue: divCardId)
+      )
+    )
+
+    let root = VisibilityTrackingRoot(
+      divCardId: DivCardID(rawValue: divCardId),
+      divKitComponents: divKitComponents
+    )
+    root.content = divView
+    root.layoutIfNeeded()
+    
+    return root
   }
 }
 
