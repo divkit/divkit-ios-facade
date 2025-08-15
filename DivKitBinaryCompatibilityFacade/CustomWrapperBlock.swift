@@ -6,6 +6,7 @@ internal import VGSL
 final class CustomWrapperBlock<Subview: DivKitFacadeWrapperView>: WrapperBlock,
   LayoutCachingDefaultImpl {
   var child: LayoutKit.Block
+
   private let divProperties: DivProperties
   private let params: [String: Any]
   private let viewConfigurator: ViewConfigurator<Subview>
