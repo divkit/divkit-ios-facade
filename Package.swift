@@ -3,7 +3,7 @@
 import PackageDescription
 
 let divkit = {
-  let version = Version(stringLiteral: "32.9.0")
+  let version = Version(stringLiteral: "32.9.0-0")
   return (
     package: Package.Dependency.package(url: "https://github.com/divkit/divkit-ios.git", from: version),
     packageName: "divkit-ios"
