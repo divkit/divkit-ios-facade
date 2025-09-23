@@ -15,24 +15,21 @@ public enum DivKitFacade {
     fontProvider: FontProviding? = nil,
     customViewFactory: ContentViewFactory? = nil,
     wrapperConfigurators: [any WrapperViewConfigurator] = [],
-    urlHandler: UrlHandling
+    urlHandler: UrlHandling,
+    urlSessionConfiguration: URLSessionConfiguration? = nil
   ) async -> FacadeView? {
-    let imageHolderFactory: DivImageHolderFactory? = if let localImageProvider {
-      LocalImageHolderFactory(
-        localImageProvider: localImageProvider,
-        imageHolderFactory: DefaultImageHolderFactory(
-          requestPerformer: URLRequestPerformer(urlTransform: nil)
-        )
-      )
-    } else {
-      nil
-    }
+    let requestPerformer = createRequestPerformer(urlSessionConfiguration: urlSessionConfiguration)
+    let imageHolderFactory = createImageHolderFactory(
+      localImageProvider: localImageProvider,
+      requestPerformer: requestPerformer
+    )
 
     let divKitComponents = DivKitComponents(
       divCustomBlockFactory: customViewFactory.map(FacadeCustomBlockFactory.init),
       extensionHandlers: wrapperConfigurators.map(\.extensionHandler),
       fontProvider: fontProvider.map(FontProviderAdapter.init),
       imageHolderFactory: imageHolderFactory,
+      requestPerformer: requestPerformer,
       reporter: VisibilityAwareReporter(urlHandler: urlHandler),
       urlHandler: UrlHandlerAdapter(handler: urlHandler)
     )
@@ -70,24 +67,21 @@ public enum DivKitFacade {
     fontProvider: FontProviding? = nil,
     customViewFactory: ContentViewFactory? = nil,
     wrapperConfigurators: [any WrapperViewConfigurator] = [],
-    urlHandler: UrlHandling
+    urlHandler: UrlHandling,
+    urlSessionConfiguration: URLSessionConfiguration? = nil
   ) -> FacadeView? {
-    let imageHolderFactory: DivImageHolderFactory? = if let localImageProvider {
-      LocalImageHolderFactory(
-        localImageProvider: localImageProvider,
-        imageHolderFactory: DefaultImageHolderFactory(
-          requestPerformer: URLRequestPerformer(urlTransform: nil)
-        )
-      )
-    } else {
-      nil
-    }
+    let requestPerformer = createRequestPerformer(urlSessionConfiguration: urlSessionConfiguration)
+    let imageHolderFactory = createImageHolderFactory(
+      localImageProvider: localImageProvider,
+      requestPerformer: requestPerformer
+    )
 
     let divKitComponents = DivKitComponents(
       divCustomBlockFactory: customViewFactory.map(FacadeCustomBlockFactory.init),
       extensionHandlers: wrapperConfigurators.map(\.extensionHandler),
       fontProvider: fontProvider.map(FontProviderAdapter.init),
       imageHolderFactory: imageHolderFactory,
+      requestPerformer: requestPerformer,
       reporter: VisibilityAwareReporter(urlHandler: urlHandler),
       urlHandler: UrlHandlerAdapter(handler: urlHandler)
     )
@@ -196,4 +190,33 @@ extension [String: Any] {
       }
     }.map(key: { DivVariableName(rawValue: $0) }, value: { $0 })
   }
+}
+
+private func createRequestPerformer(urlSessionConfiguration: URLSessionConfiguration?) -> URLRequestPerforming {
+  let sessionDelegate = URLSessionDelegateImpl()
+  let session = URLSession(
+    configuration: urlSessionConfiguration ?? .default,
+    delegate: sessionDelegate,
+    delegateQueue: .main
+  )
+
+  return URLRequestPerformer(
+    urlSession: session,
+    URLSessionDelegate: sessionDelegate,
+    urlTransform: nil
+  )
+}
+
+private func createImageHolderFactory(
+  localImageProvider: LocalImageProviding?,
+  requestPerformer: URLRequestPerforming
+) -> DivImageHolderFactory? {
+  guard let localImageProvider else { return nil }
+
+  return LocalImageHolderFactory(
+    localImageProvider: localImageProvider,
+    imageHolderFactory: DefaultImageHolderFactory(
+      requestPerformer: requestPerformer
+    )
+  )
 }
