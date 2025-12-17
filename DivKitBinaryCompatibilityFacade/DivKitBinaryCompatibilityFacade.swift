@@ -18,10 +18,10 @@ public enum DivKitFacade {
     urlHandler: UrlHandling,
     urlSessionConfiguration: URLSessionConfiguration? = nil
   ) async -> FacadeView? {
-    let requestPerformer = createRequestPerformer(urlSessionConfiguration: urlSessionConfiguration)
+    let sessionPerformerPair = SessionPerformerPair(urlSessionConfiguration: urlSessionConfiguration)
     let imageHolderFactory = createImageHolderFactory(
       localImageProvider: localImageProvider,
-      requestPerformer: requestPerformer
+      requestPerformer: sessionPerformerPair.requestPerformer
     )
 
     let divKitComponents = DivKitComponents(
@@ -29,7 +29,7 @@ public enum DivKitFacade {
       extensionHandlers: wrapperConfigurators.map(\.extensionHandler),
       fontProvider: fontProvider.map(FontProviderAdapter.init),
       imageHolderFactory: imageHolderFactory,
-      requestPerformer: requestPerformer,
+      requestPerformer: sessionPerformerPair.requestPerformer,
       reporter: VisibilityAwareReporter(urlHandler: urlHandler),
       urlHandler: UrlHandlerAdapter(handler: urlHandler)
     )
@@ -55,6 +55,9 @@ public enum DivKitFacade {
       )
       root.content = divView
       root.layoutIfNeeded()
+      
+      root.disposeBag.add(sessionPerformerPair.sessionDisposable)
+      
       return root
     }
 
@@ -70,10 +73,11 @@ public enum DivKitFacade {
     urlHandler: UrlHandling,
     urlSessionConfiguration: URLSessionConfiguration? = nil
   ) -> FacadeView? {
-    let requestPerformer = createRequestPerformer(urlSessionConfiguration: urlSessionConfiguration)
+    let sessionPerformerPair = SessionPerformerPair(urlSessionConfiguration: urlSessionConfiguration)
+    
     let imageHolderFactory = createImageHolderFactory(
       localImageProvider: localImageProvider,
-      requestPerformer: requestPerformer
+      requestPerformer: sessionPerformerPair.requestPerformer
     )
 
     let divKitComponents = DivKitComponents(
@@ -81,7 +85,7 @@ public enum DivKitFacade {
       extensionHandlers: wrapperConfigurators.map(\.extensionHandler),
       fontProvider: fontProvider.map(FontProviderAdapter.init),
       imageHolderFactory: imageHolderFactory,
-      requestPerformer: requestPerformer,
+      requestPerformer: sessionPerformerPair.requestPerformer,
       reporter: VisibilityAwareReporter(urlHandler: urlHandler),
       urlHandler: UrlHandlerAdapter(handler: urlHandler)
     )
@@ -107,6 +111,8 @@ public enum DivKitFacade {
     root.content = divView
     root.layoutIfNeeded()
     
+    root.disposeBag.add(sessionPerformerPair.sessionDisposable)
+    
     return root
   }
 }
@@ -114,6 +120,7 @@ public enum DivKitFacade {
 private final class VisibilityTrackingRoot: UIView {
   private let divKitComponents: DivKitComponents
   private let divCardId: DivCardID
+  fileprivate let disposeBag = AutodisposePool()
 
   init(divCardId: DivCardID, divKitComponents: DivKitComponents) {
     self.divCardId = divCardId
@@ -192,19 +199,29 @@ extension [String: Any] {
   }
 }
 
-private func createRequestPerformer(urlSessionConfiguration: URLSessionConfiguration?) -> URLRequestPerforming {
-  let sessionDelegate = URLSessionDelegateImpl()
-  let session = URLSession(
-    configuration: urlSessionConfiguration ?? .default,
-    delegate: sessionDelegate,
-    delegateQueue: .main
-  )
-
-  return URLRequestPerformer(
-    urlSession: session,
-    URLSessionDelegate: sessionDelegate,
-    urlTransform: nil
-  )
+private struct SessionPerformerPair {
+  let sessionDisposable: Disposable
+  let requestPerformer: URLRequestPerformer
+  
+  init(urlSessionConfiguration: URLSessionConfiguration?) {
+    let sessionDelegate = URLSessionDelegateImpl()
+    
+    let urlSession = URLSession(
+        configuration: urlSessionConfiguration ?? .default,
+        delegate: sessionDelegate,
+        delegateQueue: .main
+      )
+    
+    self.requestPerformer = URLRequestPerformer(
+      urlSession: urlSession,
+      URLSessionDelegate: sessionDelegate,
+      urlTransform: nil
+    )
+    
+    self.sessionDisposable = Disposable {
+      urlSession.invalidateAndCancel()
+    }
+  }
 }
 
 private func createImageHolderFactory(
