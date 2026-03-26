@@ -2,6 +2,7 @@ import Foundation
 import UIKit
 
 public class DivProperties {
+  @frozen
   public enum AlignmentHorizontal {
     case left
     case center
@@ -9,7 +10,8 @@ public class DivProperties {
     case start
     case end
   }
-
+  
+  @frozen
   public enum AlignmentVertical {
     case top
     case center
@@ -18,6 +20,7 @@ public class DivProperties {
   }
 
   public class TextProperties {
+    @frozen
     public enum FontWeight {
       case light
       case medium

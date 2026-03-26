@@ -3,6 +3,7 @@ import UIKit
 internal import DivKit
 internal import VGSL
 
+@frozen
 public enum FontWeight: String, CaseIterable {
   case light
   case medium
